@@ -21,6 +21,8 @@ Acuerdos de comunicación y revisión:
 
 ## Cierre de cada encuentro
 
+En la etapa 1, incluyan las capturas de pantalla, describan qué tareas realizaron y qué acordaron. Indiquen qué script SQL usarán en la etapa 2.
+
 Fecha:
 Terminado y comprobación que pasó:
 Bloqueo y mensaje observado:

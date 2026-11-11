@@ -14,7 +14,7 @@ Python 3.11 o posterior y MySQL 8.4 o MariaDB 10.11 o posterior. Cliente SQL y n
 4. Instala: `python -m pip install -r requirements.txt`.
 5. Con una cuenta administradora, abre `mysql -u root -p` o `mariadb -u root -p`. Ejecuta **un solo** script con `SOURCE sql/salas.sql;`, `SOURCE sql/equipos.sql;` o `SOURCE sql/tutorias.sql;`. También puedes abrirlo en Workbench. No repetir en una base existente.
 6. Copia `sql/usuario_app.sql` a `sql/usuario_app.local.sql`. En la copia local, cambia la clave y la base del GRANT y ejecútala con la cuenta administradora. Git excluye `*.local.sql`. Si el laboratorio ya te asignó una cuenta, usa esa.
-7. Copia `.env.example` a `.env`. Ajusta PROYECTO, DB_NAME, DB_USER y DB_PASSWORD; el nombre del proyecto y la base deben corresponder a la misma variante.
+7. Copia `.env.example` a `.env` en esta carpeta. Edita únicamente tu copia: ajusta `PROYECTO`, `DB_NAME`, `DB_USER` y `DB_PASSWORD`. Usa la tabla de abajo para elegir el proyecto y la base que le corresponde. El archivo `.env` se queda en tu computadora. [Qué es un .env](../Leccion_fullstack.md#qué-es-un-env)
 8. Ejecuta `python -m flask --app app:create_app run`.
 9. Abre http://127.0.0.1:5000. Elige un recurso y una fecha futura para probar un bloque libre.
 
@@ -50,7 +50,7 @@ Las entradas POST son objetos JSON con Content-Type application/json. Estados: 2
 
 ## Desarrollo por etapas
 
-Consulta `../Leccion_fullstack.md`. `models.py` corresponde a las tablas; `app.py` configura Flask, valida y expone la API; `index.html` presenta los formularios; `app.js` conecta la interfaz; `styles.css` adapta la distribución. El SQL instala la base de entrega; no uses create_all como sustituto. Los tests sí usan create_all en su base temporal.
+Consulta la [guía instruccional del proyecto final](../Leccion_fullstack.md). `models.py` corresponde a las tablas; `app.py` configura Flask, valida y expone la API; `index.html` presenta los formularios; `app.js` conecta la interfaz; `styles.css` adapta la distribución. El SQL instala la base de entrega; no uses create_all como sustituto. Los tests sí usan create_all en su base temporal.
 
 ## Antes de entregar
 

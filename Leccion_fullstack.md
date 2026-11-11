@@ -1,14 +1,12 @@
 # Desarrollo de una aplicación fullstack de reservas
 
-Guía de clase y tutorial para segundo año de grado asociado y bachillerato
+Guía de clase en formato de tutorial para estudiantes del curso COMP2053 Fullstack Development.
 
 Trabajarán en equipos de dos o tres personas para construir una aplicación que capture datos, compruebe disponibilidad, registre reservas y produzca un resumen diario. Elegirán uno de tres contextos. Los tres usan el mismo código y exactamente tres tablas. Al terminar, publicarán obligatoriamente el código en un repositorio de GitHub del equipo, entregarán una versión reproducible y explicarán sus decisiones mediante un video con demostración y un PowerPoint que pueda entenderse por sí solo.
 
-Esta unidad propone ocho encuentros de 100 minutos, más cuatro a seis horas de trabajo individual distribuido. El docente puede ajustar el calendario y los apoyos acordados. Las duraciones orientan la planificación y no se usan para penalizar diferentes ritmos de trabajo.
+## 1 ¿Cómo usar esta guía?
 
-## 1 Cómo usar esta guía
-
-Lee primero las secciones 2 a 6. Después desarrolla las etapas 1 a 8 en orden. Cada etapa presenta una meta, conceptos, acciones, una comprobación y una evidencia. Marca las comprobaciones antes de avanzar. Si algo falla, conserva el mensaje de error y consulta la sección de diagnóstico.
+Luego de leer esta sección, lee detalladamente las secciones 2 a 6. Después desarrolla las etapas 1 a 8 en orden. Cada etapa presenta una meta, conceptos, acciones, una comprobación y una evidencia. Marca las comprobaciones antes de avanzar. Si algo falla, conserva el mensaje de error y consulta la sección de diagnóstico.
 
 La carpeta `codigo` contiene una implementación completa de referencia, incluidos los SQL y las pruebas. Puedes ejecutarla al inicio para observar el resultado. Para aprender, construye tu copia por etapas, explica los fragmentos y realiza las pequeñas actividades señaladas. El código completo evita que una dificultad de transcripción detenga el aprendizaje. Copiarlo sin comprenderlo no demuestra las destrezas de la unidad.
 
@@ -24,14 +22,17 @@ Al finalizar podrás:
 2. Implementar una API con Flask y SQLAlchemy que valide, persista y consulte datos. Evidencia: respuestas JSON y pruebas de casos válidos e inválidos.
 3. Integrar formularios, JavaScript y AJAX para actualizar la interfaz sin recargar la página. Evidencia: una reserva visible inmediatamente y una solicitud en Network.
 4. Aplicar decisiones UX accesibles y una distribución responsive. Evidencia: recorrido por teclado, mensajes comprensibles y comprobación en pantalla estrecha.
-5. Procesar los registros mediante agrupaciones y porcentajes. Evidencia: resumen cuyo resultado coincida con un cálculo manual.
+5. Procesar los registros (récords) mediante agrupaciones y porcentajes. Evidencia: resumen cuyo resultado coincida con un cálculo manual.
 6. Explicar el recorrido de un dato y colaborar con una carga razonablemente equivalente. Evidencia: video, PowerPoint, bitácora y revisiones cruzadas.
 
-**Activación de conocimientos previos, 10 minutos.** Dibuja qué ocurre al enviar un formulario HTML tradicional. Luego señala qué parte cambia al usar `fetch`. Explica la diferencia entre clave primaria y foránea. No necesitas aprender otro lenguaje ni otro framework para esta unidad.
+**Activación de conocimientos previos, 10 minutos.**
+
+- Dibuja qué ocurre al enviar un formulario HTML tradicional. Luego señala qué parte cambia al usar en jQuery `$.ajax` o `$.get` (en Javascript sería el comando `fetch`).
+- Explica la diferencia entre clave primaria y foránea. No necesitas aprender otro lenguaje ni otro framework para esta unidad.
 
 ## 3 Elige uno de los tres proyectos
 
-| Aspecto | A Reservas de salas | B Préstamo de computadoras | C Citas de tutoría |
+| Aspecto | A - Reservas de salas | B - Préstamo de computadoras | C - Citas de tutoría |
 |---|---|---|---|
 | Persona que solicita | Estudiante responsable | Estudiante que toma el equipo | Estudiante que recibe tutoría |
 | Una fila de recursos | Una sala física | Una computadora con identificador único | Una persona tutora |
@@ -43,13 +44,28 @@ Al finalizar podrás:
 | PROYECTO en .env | salas | equipos | tutorias |
 | DB_NAME en .env | fullstack_salas | fullstack_equipos | fullstack_tutorias |
 
-**A Salas.** Una reserva bloquea la sala completa. Se registra a una persona responsable, no a cada asistente. El prototipo no administra capacidad ni asistencia.
+- **A · Salas.** Una reserva bloquea la sala completa. Se registra a una persona responsable, no a cada asistente. El prototipo no administra capacidad ni asistencia.
+- **B · Computadoras.** Se presta una unidad identificable durante una hora. EQ001 y EQ002 son unidades diferentes aunque tengan el mismo sistema operativo. El prototipo no administra entrega física, devolución tardía ni multas.
+- **C · Tutorías.** Cada tutor aparece una sola vez y atiende una sola materia en este prototipo. La opción del formulario muestra nombre y materia, por lo que elegirla selecciona ambos. No dupliques al mismo tutor con otra materia: eso permitiría reservar a la misma persona dos veces. Administrar varias materias por tutor necesitaría rediseñar el modelo y queda fuera de esta unidad.
 
-**B Computadoras.** Se presta una unidad identificable durante una hora. EQ001 y EQ002 son unidades diferentes aunque tengan el mismo sistema operativo. El prototipo no administra entrega física, devolución tardía ni multas.
+**Elección del equipo de trabajo.** Escriban el proyecto, sus integrantes y una razón relacionada con sus intereses. La opción elegida no cambia la cantidad de funcionalidades, las pruebas ni los puntos disponibles.
 
-**C Tutorías.** Cada tutor aparece una sola vez y atiende una sola materia en este prototipo. La opción del formulario muestra nombre y materia, por lo que elegirla selecciona ambos. No dupliques al mismo tutor con otra materia: eso permitiría reservar a la misma persona dos veces. Administrar varias materias por tutor necesitaría rediseñar el modelo y queda fuera de esta unidad.
+### ¿Qué es un .env?
 
-**Elección del equipo.** Escriban el proyecto, sus integrantes y una razón relacionada con sus intereses. La opción elegida no cambia la cantidad de funcionalidades, las pruebas ni los puntos disponibles.
+Un archivo **.env** es un archivo de texto donde guardas la configuración que una aplicación necesita para funcionar en tu computadora. Su nombre viene de environment, que significa “ambiente”. En el proyecto de reservas, por ejemplo, Flask lee este archivo al iniciar para saber qué base de datos debe usar.
+
+Cada línea tiene el formato `NOMBRE=valor`. Para el proyecto de salas, dos de esas líneas serían:
+
+```text
+PROYECTO=salas
+DB_NAME=fullstack_salas
+```
+
+La primera línea selecciona el proyecto de salas y la segunda indica el nombre de su base de datos. Si tu equipo elige tutorías, cambia los valores a tutorias y fullstack_tutorias. Así puedes usar el mismo código para ambos proyectos.
+
+### ¿Qué se sube a GitHub?
+
+En GitHub se comparte `.env.example`, una plantilla con los nombres de las variables y valores de ejemplo. Cada integrante hace una copia en su computadora, la llama `.env` y escribe allí su configuración. Guarda la contraseña solo en esa copia local. El proyecto ya incluye un archivo `.gitignore` que le indica a Git que ignore `.env`. Al revisar los cambios en Git, debes ver la plantilla si la editaste. Tu archivo local `.env` no debe aparecer.
 
 ## 4 Alcance y reglas comunes
 
@@ -90,11 +106,11 @@ Usen `plantillas/Bitacora_equipo.md`. Dividan el trabajo en entregables comproba
 | T11 Instalación y PowerPoint | README y resumen autónomo | A | B |
 | T12 Guion y edición de video | Video con demo y subtítulos | B | A |
 
-En pareja, cada integrante tiene seis tareas y 18 puntos. En un trío, cada integrante tiene cuatro tareas y 12 puntos. La responsabilidad principal no significa trabajar sin apoyo. En el video y la revisión técnica participan todos, aunque una persona integre el archivo final.
+**Posibles divisiones del equipo de trabajo:** En pareja, cada integrante tiene seis tareas y 18 puntos. En un trío, cada integrante tiene cuatro tareas y 12 puntos. La responsabilidad principal no significa trabajar sin apoyo. En el video y la revisión técnica participan todos, aunque una persona integre el archivo final.
 
 **Rotación de revisión.** En pareja, A revisa a B y B a A. En trío, A revisa a B, B a C y C a A. Cada integrante debe implementar código y revisar una parte de otra capa. Nadie queda asignado solamente a tomar notas o diseñar las diapositivas.
 
-**Acuerdos prácticos.** Reserven diez minutos por encuentro para distribuir y cerrar tareas. Mantengan las columnas Pendiente, En curso, Para revisar y Terminado. Eviten editar simultáneamente la misma función de `app.py`; integren cambios pequeños y prueben después de cada integración. Usen obligatoriamente Git y GitHub: una rama por tarea, mensajes comprensibles y pull requests revisados antes de unir cambios. La cantidad de commits no mide por sí sola el aporte.
+**Acuerdos prácticos.** Reserven diez minutos por encuentro para distribuir y cerrar tareas. Mantengan las columnas Pendiente, En curso, Para revisar y Terminado. Eviten editar simultáneamente la misma función de `app.py` o la misma parte de otro archivo; integren cambios pequeños y prueben después de cada integración. Usen obligatoriamente Git y GitHub: es recomendable utilizar un “Branch” (rama) por tarea, mensajes comprensibles y pull requests revisados antes de unir cambios. La cantidad de commits no mide por sí sola el aporte.
 
 **Rebalanceo.** Al terminar cada encuentro comparen esfuerzo real y bloqueos. Si alguien necesita más tiempo, dividan una tarea o intercambien responsabilidades con acuerdo escrito. No se exige divulgar diagnósticos. La equidad se aprecia en complejidad, revisión, aprendizaje y evidencia, no en velocidad ni cantidad de líneas.
 
@@ -102,17 +118,18 @@ En pareja, cada integrante tiene seis tareas y 18 puntos. En un trío, cada inte
 
 El diseño ofrece opciones de participación, representación y expresión, en consonancia con las orientaciones de CAST. No presupone que todos los estudiantes neurodivergentes necesiten los mismos apoyos. El docente mantiene los objetivos y conversa de forma privada sobre los apoyos individuales que correspondan. Fuente: [CAST UDL Guidelines](https://udlguidelines.cast.org/).
 
-- La agenda y los criterios se entregan antes de cada clase. Cada etapa mantiene la misma secuencia y termina con una comprobación observable.
-- Se combina explicación escrita, fragmentos de código, demostración comentada y práctica. El material editable permite ampliar texto, usar lectura asistida y cambiar la presentación visual.
-- Se propone trabajar en bloques de 20 a 25 minutos y hacer pausas breves acordadas. El cronómetro es una opción, no una obligación. Se puede usar un espacio de menor distracción.
-- Las instrucciones nombran el archivo y el resultado esperado. Se ofrecen ejemplos completos, listas de verificación y una plantilla para dejar el siguiente paso por escrito.
-- Se permite participar por voz, texto, comunicación aumentativa o segmentos grabados. La evidencia técnica individual se mantiene; no se puntúa contacto visual, rapidez de respuesta, acento o fluidez oral.
-- El video puede editarse y grabarse por segmentos, con subtítulos revisados y transcripción. La cámara es opcional. La demostración debe mostrar la aplicación ejecutándose.
-- Los mensajes de la aplicación deben decir qué ocurrió y cómo continuar, sin depender únicamente de colores. Se preservan los datos cuando falla el envío.
+- El equipo decide su agenda y su ritmo de trabajo. Sigan las etapas en orden y comprueben el resultado de cada una antes de avanzar.
+- Encontrarán los criterios de evaluación en la sección 16 de esta guía, también disponible en GitHub.
+- Se combina explicación escrita, fragmentos de código, demostración comentada y práctica. El material editable permite ampliar texto, usar lectura asistida, asistencia de IA y cambiar la presentación visual.
+- Se propone trabajar en bloques de 25 a 30 minutos y hacer pausas breves acordadas. El cronómetro es una opción, no una obligación.
+- Las instrucciones nombran los archivos y los resultados esperados. Se ofrecen ejemplos completos, listas de verificación y una plantilla para dejar el siguiente paso por escrito.
+- Para el trabajo en grupo; se permite participar por voz, texto, comunicación aumentativa, segmentos grabados y utilizar asistencia de IA con el fin de aclarar dudas.
+- Para el código; los mensajes de la aplicación deben decir qué ocurrió y cómo continuar, sin depender únicamente de colores. Se preservan los datos cuando falla el envío.
+- Pueden grabar y editar el video por segmentos. La cámara es opcional. Muestren la aplicación en ejecución e incluyan subtítulos revisados y una transcripción, como indica la rúbrica de la nota 1. Cada integrante demuestra su comprensión técnica. No se evalúan el contacto visual, la rapidez de respuesta, el acento ni la fluidez oral.
 
-**Rutina de cada encuentro de 100 minutos.** Agenda y recuperación, 10; explicación y demostración, 15; práctica guiada, 25; pausa, 5; aplicación en equipo, 30; revisión y registro del siguiente paso, 15. Ajusten esta estructura según los apoyos acordados.
+**Rutina de cada encuentro grupal.** Agenda y recuperación del trabajo pasado; explicación y demostración (si es necesario); práctica o demostración guiada (si es necesario); aplicación en equipo; revisión de acuerdos y registro de los siguientes pasos. Ajusten esta estructura según los temas acordados.
 
-## 7 Etapa 1 Analizar el problema y preparar el entorno
+## 7 Etapa 1 - Analizar el problema y preparar el entorno
 
 **Meta.** Explicar qué construirán y abrir el proyecto con sus herramientas listas.
 
@@ -120,9 +137,9 @@ El diseño ofrece opciones de participación, representación y expresión, en c
 
 **Recorrido de una reserva.** Formulario del navegador; `fetch` con JSON; ruta Flask; validación; transacción SQLAlchemy; INSERT en la base; respuesta 201; actualización del DOM y del resumen. La respuesta de error interrumpe el guardado y explica qué corregir.
 
-**Acciones.** Desde el primer encuentro, sigan `INICIO.md` para crear el repositorio del equipo y clonarlo. Elaboren un boceto con tres secciones: registrar persona, crear reserva y consultar/cancelar. Escriban una historia: «Como persona operadora, quiero reservar un recurso para un estudiante en una hora disponible, para evitar asignaciones duplicadas». Su aceptación exige una fila nueva, una confirmación y el bloqueo de la hora.
+**Acciones.** Desde el primer encuentro, sigan `INICIO.md` para crear el repositorio del equipo y clonarlo. Elaboren un boceto con tres secciones: registrar persona, crear reserva y consultar/cancelar. Escriban una historia: “Como persona operadora, quiero reservar un recurso para un estudiante en una hora disponible, para evitar asignaciones duplicadas”. Su aceptación exige una fila nueva, una confirmación y el bloqueo de la hora.
 
-Instalen Git, creen o comprueben sus cuentas de GitHub, instalen Python 3.11 o posterior, un editor y MySQL 8.4 o MariaDB 10.11 o posterior. Usen el motor disponible en el laboratorio. No necesitan instalar ambos. El SQL usa InnoDB y `utf8mb4_unicode_ci`, común a los dos motores. Las versiones de las dependencias fijadas en `requirements.txt` son una base de referencia, no una afirmación de que sean las más recientes.
+Instalen Git, creen o comprueben sus cuentas de GitHub, instalen Python 3.11 o posterior, un editor y MySQL 8.4 o MariaDB 10.11 o posterior. Las versiones de las dependencias fijadas en `requirements.txt` son una base de referencia, no una afirmación de que sean las más recientes.
 
 Estructura mínima entregable:
 
@@ -144,7 +161,9 @@ codigo/
   tests/test_app.py
 ```
 
-Abran una terminal dentro de `codigo`. En macOS o Linux:
+En VS Code, hagan clic derecho en la carpeta `codigo` y seleccionen `Open in Integrated Terminal`. Si usan otro editor, abran una terminal en esa carpeta. Ejecuten el bloque que corresponda a su sistema:
+
+En macOS o Linux:
 
 ```bash
 python3 -m venv .venv
@@ -165,13 +184,13 @@ Si PowerShell restringe la activación, pueden ejecutar directamente `.venv\Scri
 
 **Comprobación.** `python -c "import flask, flask_sqlalchemy, pymysql"` termina sin error; en Windows usa el Python del entorno. Cada persona puede describir al menos una responsabilidad de cada capa.
 
-**Evidencia.** Boceto, historia de usuario y acuerdo de tareas. Al cerrar, registren qué script SQL necesitarán en la etapa 2.
+**Evidencia.** Guarden las capturas de pantalla y anoten las tareas realizadas y los acuerdos. Al cerrar, registren qué script SQL necesitarán en la etapa 2.
 
-## 8 Etapa 2 Diseñar y crear las tres tablas
+## 8 Etapa 2 - Diseñar y crear las tres tablas
 
 **Meta.** Crear una base nueva y comprender sus relaciones.
 
-**Conceptos.** Una clave primaria identifica una fila. Una clave foránea exige que el registro relacionado exista. `UNIQUE` impide duplicados. Una relación uno a muchos permite que una persona tenga varias reservas y que un recurso aparezca en varias reservas, en horarios diferentes.
+**Conceptos.** Una clave primaria identifica una fila. Una clave foránea exige que el registro (récord) relacionado exista. `UNIQUE` impide duplicados. Una relación uno a muchos permite que una persona tenga varias reservas y que un recurso aparezca en varias reservas, en horarios diferentes.
 
 Modelo común:
 
@@ -228,7 +247,7 @@ CREATE TABLE reservas (
 ) ENGINE=InnoDB;
 ```
 
-Este fragmento explica la tabla; no lo ejecutes de nuevo después del script completo. Los valores `NULL` no se admiten en los campos de negocio. Un índice único evita registros repetidos incluso cuando dos solicitudes llegan casi al mismo tiempo. Fuente técnica: [MySQL sobre restricciones de unicidad](https://dev.mysql.com/doc/refman/8.4/en/constraint-primary-key.html).
+Este fragmento explica la tabla; no lo ejecutes de nuevo después del script completo. Los valores `NULL` no se admiten en los campos de negocio. Un índice único evita registros (récords) repetidos incluso cuando dos solicitudes llegan casi al mismo tiempo. Fuente técnica: [MySQL sobre restricciones de unicidad](https://dev.mysql.com/doc/refman/8.4/en/constraint-primary-key.html).
 
 **Cuenta de la aplicación.** Copia `sql/usuario_app.sql` a `sql/usuario_app.local.sql`. Edita la copia local con la clave y el nombre de la base en `GRANT`. Ejecuta solo la copia con la cuenta administradora. Git excluye los archivos `*.local.sql`. Si el docente ya asignó un usuario, utiliza ese. Después copia sus datos a `.env`. La aplicación solo necesita SELECT, INSERT y DELETE en su propia base.
 
@@ -249,7 +268,7 @@ Para equipos o tutorías cambia tanto `PROYECTO` como `DB_NAME`. No compartas `.
 
 **Evidencia.** Diagrama, captura o salida de las consultas, SQL actualizado y nombre del motor con su versión.
 
-## 9 Etapa 3 Conectar Flask y representar los datos
+## 9 Etapa 3 - Conectar Flask y representar los datos
 
 **Meta.** Conectar Flask con la base y reconocer la correspondencia entre clases y tablas.
 
@@ -299,7 +318,7 @@ db.init_app(app)
 
 **Evidencia.** Cada persona explica una clase, una relación y el propósito de la configuración. Consulta complementaria: [inicio de Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/stable/quickstart/).
 
-## 10 Etapa 4 Construir la API y validar entradas
+## 10 Etapa 4 - Construir la API y validar entradas
 
 **Meta.** Completar el contrato de intercambio entre navegador y servidor.
 
@@ -363,7 +382,7 @@ const respuesta = await fetch('/api/reservas', {
 console.log(respuesta.status, await respuesta.json());
 ```
 
-El marcador `AAAA-MM-DD` debe reemplazarse antes de ejecutar. Si usas tutorías, adapta el motivo a la materia; la forma del JSON no cambia.
+Sustituye `AAAA-MM-DD` por la fecha de mañana en formato año-mes-día. Si usas tutorías, adapta el motivo a la materia; la forma del JSON no cambia.
 
 **Aplicación de destreza.** Antes de leer `fecha_valida`, escriban tres valores que debería rechazar. Compárenlos con la implementación y ejecuten al menos uno. Expliquen por qué una FK y una validación de formato cumplen funciones diferentes.
 
@@ -371,7 +390,7 @@ El marcador `AAAA-MM-DD` debe reemplazarse antes de ejecutar. Si usas tutorías,
 
 **Evidencia.** Tabla de solicitudes con datos enviados, código de estado y resultado. Fuente de consulta: [restricciones en SQLAlchemy](https://docs.sqlalchemy.org/en/20/core/constraints.html).
 
-## 11 Etapa 5 Crear formularios y conectar AJAX
+## 11 Etapa 5 - Crear formularios y conectar AJAX
 
 **Meta.** Usar los endpoints desde una interfaz accesible que conserve el contexto.
 
@@ -434,11 +453,11 @@ No concatenen el motivo dentro de `innerHTML`. La interfaz debe representar etiq
 
 **Evidencia.** Captura de pantalla estrecha, lista de comprobación de teclado y solicitud POST visible en Network. Consulta: [Flask con JavaScript, fetch y JSON](https://flask.palletsprojects.com/en/stable/patterns/javascript/).
 
-## 12 Etapa 6 Procesar y consultar los datos
+## 12 Etapa 6 - Procesar y consultar los datos
 
-**Meta.** Transformar registros en información comprobable.
+**Meta.** Transformar registros (récords) en información comprobable.
 
-**Conceptos.** `JOIN` relaciona registros; `COUNT` cuenta; `GROUP BY` agrupa. En SQLAlchemy, las relaciones permiten mostrar el nombre de la persona y del recurso. El resumen agrupa por recurso y después incluye los recursos que tienen cero reservas.
+**Conceptos.** `JOIN` relaciona registros (récords); `COUNT` cuenta; `GROUP BY` agrupa. En SQLAlchemy, las relaciones permiten mostrar el nombre de la persona y del recurso. El resumen agrupa por recurso y después incluye los recursos que tienen cero reservas.
 
 **Acciones.** Implementen las rutas de disponibilidad, listado, cancelación y resumen. La fecha elegida filtra la lista completa y el resumen. El formulario filtra la disponibilidad de un recurso. Estas son consultas diferentes y sus etiquetas deben dejarlo claro.
 
@@ -464,7 +483,7 @@ conteos = dict(db.session.execute(
 
 La implementación recorre el catálogo para mostrar también los ceros. No almacena porcentajes en una cuarta tabla: se calculan a partir de los datos existentes.
 
-**Programación en equipo: filtro del listado.** La referencia ya acepta `recurso_id` en `GET /api/reservas`. Conecten esa capacidad a un nuevo selector en la sección 3 de la interfaz. Asignen una etiqueta visible con el nombre de su dominio, por ejemplo «Filtrar por sala». La primera opción será «Todos», con valor vacío. Rellenen el selector con el catálogo que recibe `iniciar()`. Al cambiarlo, ejecuten `listar()`.
+**Programación en equipo: filtro del listado.** La referencia ya acepta `recurso_id` en `GET /api/reservas`. Conecten esa capacidad a un nuevo selector en la sección 3 de la interfaz. Asignen una etiqueta visible con el nombre de su dominio, por ejemplo “Filtrar por sala”. La primera opción será “Todos”, con valor vacío. Rellenen el selector con el catálogo que recibe `iniciar()`. Al cambiarlo, ejecuten `listar()`.
 
 Dentro de `listar()`, creen parámetros independientes para la lista. Mantengan `params` para el resumen de todos los recursos de la fecha. Usen este patrón después de agregar el selector con identificador `filtro-recurso`:
 
@@ -478,7 +497,7 @@ const [reservas, resumen] = await Promise.all([
 ]);
 ```
 
-Prueben con dos reservas en recursos distintos. Al seleccionar uno, debe quedar una fila y el resumen diario debe seguir contando dos. Al volver a «Todos», deben reaparecer las dos. Actualicen la explicación visible de la sección 3 y redacten un mensaje específico para un filtro sin resultados. En tutorías el selector muestra tutor y materia. En equipos muestra identificador y tipo. Guarden este cambio en un pull request con su comprobación.
+Prueben con dos reservas en recursos distintos. Al seleccionar uno, debe quedar una fila y el resumen diario debe seguir contando dos. Al volver a “Todos”, deben reaparecer las dos. Actualicen la explicación visible de la sección 3 y redacten un mensaje específico para un filtro sin resultados. En tutorías el selector muestra tutor y materia. En equipos muestra identificador y tipo. Guarden este cambio en un pull request con su comprobación.
 
 **Cancelación.** La interfaz solicita confirmación y envía `DELETE /api/reservas/id`. Flask comprueba que exista y que no haya comenzado; luego elimina y confirma. La interfaz procesa 204 sin buscar JSON, actualiza lista y horarios y coloca el foco en el encabezado del listado. Cancelar dos veces el mismo identificador produce 404 en el segundo intento.
 
@@ -488,7 +507,7 @@ Prueben con dos reservas en recursos distintos. Al seleccionar uno, debe quedar 
 
 **Evidencia.** Una tabla con valores antes y después, y una explicación de por qué estos resultados constituyen procesamiento de datos.
 
-## 13 Etapa 7 Probar e integrar
+## 13 Etapa 7 - Probar e integrar
 
 **Meta.** Encontrar problemas antes de la demostración y comprobar una instalación reproducible.
 
@@ -515,19 +534,24 @@ Para P11, abran dos pestañas y preparen el mismo bloque con personas distintas.
 
 **Prueba de instalación por otra persona.** Una persona que no configuró inicialmente debe seguir el README, usar una base nueva y demostrar una reserva completa. No borren una base existente solo para repetir el ensayo; utilicen una copia del SQL con un nuevo nombre y documenten el cambio temporal.
 
-**Revisión cruzada.** Cada integrante explica una ruta escrita por otra persona y propone una prueba que podría hacerla fallar. Registren resultado esperado, observado, responsable y corrección en `plantillas/Plan_pruebas.md`. No escriban «todo funciona» sin evidencia.
+**Revisión cruzada.** Cada integrante explica una ruta escrita por otra persona y propone una prueba que podría hacerla fallar. Registren resultado esperado, observado, responsable y corrección en `plantillas/Plan_pruebas.md`. No escriban “todo funciona” sin evidencia.
 
 **Comprobación.** El equipo completa la matriz, distingue resultados automáticos de manuales y resuelve los defectos que impiden el flujo principal. Un defecto pendiente se declara con su efecto y forma de reproducirlo.
 
 **Evidencia.** Resultados de pytest, versión del motor, pruebas manuales, salida de SQL y bitácora de integración.
 
-## 14 Etapa 8 Documentar y preparar la entrega
+## 14 Etapa 8 - Documentar y preparar la entrega
 
 **Meta.** Entregar un proyecto que otra persona pueda comprender, ejecutar y evaluar.
 
 **Acciones.** Completen el README con propósito, integrantes, proyecto elegido, requisitos, configuración, SQL, ejecución, pruebas, endpoints y limitaciones. Usen rutas relativas dentro del repositorio. Mantengan credenciales fuera del ZIP. Si modificaron dependencias, registren las versiones probadas.
 
-La entrega principal y obligatoria es el enlace al repositorio GitHub del equipo, la etiqueta `v1.0-entrega` y el SHA del commit evaluado. El ZIP sirve como copia de respaldo y no sustituye el repositorio. Mantengan esta organización:
+**IMPORTANTE:**
+
+- La entrega principal y obligatoria es el enlace al repositorio GitHub del equipo, la etiqueta `v1.0-entrega` y el SHA del commit evaluado.
+- El ZIP sirve como copia de respaldo y no sustituye el repositorio.
+
+Mantengan esta organización:
 
 ```text
 Equipo_Proyecto/
@@ -599,7 +623,7 @@ Fuente para el procedimiento: [repositorios desde una plantilla](https://docs.gi
 
 ## 15 Video y PowerPoint para la primera nota
 
-El video dura aproximadamente 10 a 12 minutos por equipo, con ajustes acordados cuando sean necesarios. La demostración «en vivo» significa que se observa la aplicación ejecutándose y respondiendo durante la grabación, con interacción real. No requiere una transmisión en directo. Se pueden grabar segmentos y editar transiciones; las operaciones centrales deben verse de forma continua y con resultados legibles.
+El video dura aproximadamente 10 a 12 minutos por equipo, con ajustes acordados cuando sean necesarios. La demostración “en vivo” significa que se observa la aplicación ejecutándose y respondiendo durante la grabación, con interacción real. No requiere una transmisión en directo. Se pueden grabar segmentos y editar transiciones; las operaciones centrales deben verse de forma continua y con resultados legibles.
 
 Guion sugerido:
 
@@ -612,30 +636,30 @@ Guion sugerido:
 | 8:30 a 10:30 | Network o código relevante, pruebas y decisiones de accesibilidad |
 | 10:30 a 12:00 | Aportes individuales, limitaciones y aprendizaje |
 
-En la demo usen una fecha futura, un motivo ficticio y dos personas. Muestren al menos una solicitud HTTP con estado y respuesta. Si necesitan enviar un conflicto que la interfaz ya bloquea, expliquen cómo lo provocan desde una segunda pestaña o la consola. No sustituyan el flujo completo por capturas estáticas.
+**IMPORTANTE: En la demo usen una fecha futura, un motivo ficticio y dos personas.** Muestren al menos una solicitud HTTP con estado y respuesta. Si necesitan enviar un conflicto que la interfaz ya bloquea, expliquen cómo lo provocan desde una segunda pestaña o la consola. No sustituyan el flujo completo por capturas estáticas.
 
 El PowerPoint tendrá unas diez diapositivas. La plantilla adjunta ofrece el orden y preguntas de apoyo; el equipo sustituye las indicaciones por evidencia de su proyecto. Cada captura lleva una explicación. El lector no debe depender de lo que se dijo en el video.
 
-1. Identificación: nombre, contexto, integrantes y enlace al código y al video.
-2. Problema y alcance: quién usa el panel, qué resuelve y qué queda fuera.
-3. Flujo funcional: pasos y resultados observables del usuario.
-4. Arquitectura y tecnologías: función concreta de cada componente.
-5. Modelo de datos: tres tablas, PK, FK y unicidad.
-6. API: ejemplos de solicitud, respuesta y estados relevantes.
-7. Evidencia funcional: capturas del alta, reserva y resultado, con explicación.
-8. Procesamiento y calidad: cálculo verificable, conflictos y resultados de pruebas.
-9. UX y accesibilidad: decisiones, evidencia de teclado y adaptación de pantalla.
-10. Reproducción y reflexión: pasos de arranque, aportes, limitaciones y fuentes.
+1. **Identificación**: nombre, contexto, integrantes y enlace al código y al video.
+2. **Problema y alcance**: quién usa el panel, qué resuelve y qué queda fuera.
+3. **Flujo funcional**: pasos y resultados observables del usuario.
+4. **Arquitectura y tecnologías**: función concreta de cada componente.
+5. **Modelo de datos**: tres tablas, PK, FK y unicidad.
+6. **API**: ejemplos de solicitud, respuesta y estados relevantes.
+7. **Evidencia funcional**: capturas del alta, reserva y resultado, con explicación.
+8. **Procesamiento y calidad**: cálculo verificable, conflictos y resultados de pruebas.
+9. **UX y accesibilidad**: decisiones, evidencia de teclado y adaptación de pantalla.
+10. **Reproducción y reflexión**: pasos de arranque, aportes, limitaciones y fuentes.
 
 Usen tipografía legible, contraste suficiente y texto conciso. Añadan texto alternativo a imágenes relevantes. Revisen los subtítulos del video, en especial nombres de tecnologías. La narración puede realizarse con voz propia, síntesis de voz o apoyos de comunicación; cada integrante identifica su aporte y demuestra comprensión técnica.
 
 ## 16 Dos notas independientes
 
-Cada componente se evalúa sobre 100 puntos y se registra como una nota separada del curso. El peso de estas notas en el promedio final depende del prontuario; esta guía no fija un porcentaje global. Ambas usan la misma exigencia para los tres proyectos y para equipos de dos o tres.
+**Cada componente del proyecto se evalúa sobre 100 puntos y se registra como una nota separada del curso.**
 
 Para cada criterio se asigna un nivel y se multiplica por su máximo: **Completo 1.00**, evidencia correcta y todos sus indicadores; **Mayormente logrado 0.75**, evidencia verificable con omisiones menores; **En desarrollo 0.50**, evidencia parcial con errores que afectan la explicación o el funcionamiento; **Sin evidencia 0**, falta o no puede verificarse. Se suman los resultados y se redondea la nota final a un decimal. El docente explica qué indicador falta cuando no asigna el nivel completo.
 
-### Nota 1 Presentación con video y PowerPoint
+### Nota 1 - Presentación con video y PowerPoint
 
 | Criterio | Máximo | Indicadores del nivel completo |
 |---|---|---|
@@ -647,9 +671,13 @@ Para cada criterio se asigna un nivel y se multiplica por su máximo: **Completo
 | Comprensión individual | 15 | Cada integrante explica una contribución propia, una conexión con otra capa y una prueba pertinente mediante el formato de comunicación elegido |
 | Total | 100 | 85 puntos de evidencia grupal y 15 individuales |
 
-Los primeros cinco criterios se comparten dentro del equipo. El último se asigna a cada integrante por su evidencia. El video y el PowerPoint son obligatorios: sin PowerPoint, su criterio recibe cero; sin video, la demostración recibe cero. Otros criterios se puntúan solo con la evidencia que efectivamente exista, sin descuentos arbitrarios adicionales.
+**IMPORTANTE:**
 
-### Nota 2 Desarrollo y funcionamiento
+- Los primeros cinco criterios se comparten dentro del equipo. El último se asigna a cada integrante por su evidencia.
+- El video y el PowerPoint son obligatorios: sin PowerPoint, su criterio recibe cero; sin video, la demostración recibe cero.
+- Otros criterios se puntúan solo con la evidencia que efectivamente exista, sin descuentos arbitrarios adicionales.
+
+### Nota 2 - Desarrollo y funcionamiento
 
 | Criterio | Máximo | Indicadores del nivel completo |
 |---|---|---|
@@ -661,14 +689,18 @@ Los primeros cinco criterios se comparten dentro del equipo. El último se asign
 | Trabajo individual verificable | 10 | Implementa código con autoría identificable, abre al menos un pull request, revisa uno de otra persona y registra decisiones y rebalanceo |
 | Total | 100 | 90 puntos de evidencia grupal y 10 individuales |
 
-La nota de desarrollo se basa en el código y su ejecución, aunque la presentación tenga dificultades. La presentación se evalúa con su propia rúbrica. No se exige que un estudiante grabe más minutos ni escriba más líneas para acreditar un aporte comparable. Una contribución en pareja puede documentarse como trabajo compartido, indicando qué razonó y verificó cada persona.
+**IMPORTANTE:**
+
+- La nota de desarrollo se basa en el código y su ejecución, aunque la presentación tenga dificultades.
+- La presentación se evalúa con su propia rúbrica. No se exige que un estudiante grabe más minutos ni escriba más líneas para acreditar un aporte comparable.
+- Una contribución en pareja puede documentarse como trabajo compartido, indicando qué razonó y verificó cada persona.
 
 ## 17 Diagnóstico de problemas frecuentes
 
-| Síntoma | Comprobación y próxima acción |
+| Error/Comportamiento | Comprobación y próxima acción |
 |---|---|
 | ModuleNotFoundError | Usa el Python del entorno e instala requirements.txt desde codigo |
-| Access denied | Revisa usuario, clave, host y GRANT; prueba iniciar sesión con esa cuenta |
+| Access denied | Prueba iniciar sesión con el usuario de la aplicación. Revisa usuario, clave y host en .env. Si faltan permisos sobre la base elegida, revisa GRANT con la cuenta administradora. |
 | Unknown database | Ejecuta la variante SQL y verifica DB_NAME |
 | Table already exists o database exists | El script ya se ejecutó; no lo repitas sobre la misma base; usa la existente o una base nueva para el ensayo |
 | JSON con datos de otro proyecto | Revisa PROYECTO y DB_NAME juntos; reinicia Flask |
@@ -683,7 +715,16 @@ Al pedir ayuda compartan: paso, resultado esperado, resultado observado, código
 
 ## 18 Glosario y fuentes de consulta
 
-**API REST.** Interfaz que organiza operaciones sobre recursos usando HTTP. **Endpoint.** Combinación de ruta y método. **JSON.** Formato de intercambio de datos. **DOM.** Representación del documento que JavaScript puede modificar. **ORM.** Herramienta para trabajar con registros mediante objetos. **Transacción.** Unidad de trabajo que se confirma o revierte. **Restricción.** Regla que la base aplica a los datos. **AJAX.** Intercambio asíncrono que permite actualizar la interfaz sin recargar toda la página.
+| Concepto | Definición |
+|---|---|
+| API REST | Interfaz que organiza operaciones sobre recursos usando HTTP |
+| Endpoint | Combinación de ruta y método |
+| JSON | Formato de intercambio de datos |
+| DOM | Representación del documento que JavaScript puede modificar |
+| ORM | Herramienta para trabajar con registros (récords) mediante objetos |
+| Transacción | Unidad de trabajo que se confirma o revierte |
+| Restricción | Regla que la base aplica a los datos |
+| AJAX | Intercambio asíncrono que permite actualizar la interfaz sin recargar toda la página |
 
 Esta secuencia, sus actividades y rúbricas son una propuesta docente para el contexto descrito. Las fuentes siguientes respaldan los mecanismos técnicos y los principios generales de accesibilidad; no prescriben estas duraciones ni esta ponderación.
 

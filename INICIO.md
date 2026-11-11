@@ -1,6 +1,6 @@
 # Primera clase
 
-1. Elijan salas, computadoras o tutorías y asignen las tareas de la sección 5 de la guía.
+1. Lean las secciones 2 a 6 de la [guía del proyecto final](Leccion_fullstack.md). Elijan salas, computadoras o tutorías, asignen las tareas de la sección 5 y acuerden la agenda del equipo. Pueden usar bloques de 25 a 30 minutos con pausas.
 2. Antes de editar el código, creen **un único repositorio de GitHub por equipo** y den acceso a cada integrante y al docente. Pueden trabajar en un repositorio privado.
 3. Un integrante crea la copia del equipo. Para una copia pública, abran el [repositorio base del curso](https://github.com/javierdastas/comp2053), seleccionen **Fork**, escojan un nombre y pulsen **Create fork**. Continúen con el paso 4. Para un repositorio privado o independiente, [descarguen el código base en ZIP](https://github.com/javierdastas/comp2053/archive/refs/heads/main.zip), extráiganlo y creen un repositorio vacío en GitHub. Desde la carpeta que contiene este archivo, ejecuten los siguientes comandos. Sustituyan `URL_DEL_EQUIPO` por la dirección HTTPS del nuevo repositorio.
 
@@ -14,8 +14,8 @@ git push -u origin main
 ```
 
 4. Cada integrante que necesite su copia local clona el repositorio **del equipo** con `git clone URL_DEL_EQUIPO`. Comprueben que GitHub muestra los archivos dentro de `codigo/sql`, los formularios y las pruebas. Abran una rama para su primera tarea y acuerden quién la revisará. [Procedimiento de GitHub en la guía](Leccion_fullstack.md#repositorio-github-obligatorio-y-copia-de-la-base)
-5. Sigan la instalación desde `codigo`. Elijan una sola variante SQL. Para las credenciales de desarrollo, creen archivos locales excluidos de Git. [Instalación](codigo/README.md)
-6. Al final del encuentro registren qué funcionó, qué queda por construir y en qué archivo retomarán el trabajo. [Bitácora](plantillas/Bitacora_equipo.md)
+5. Abran una terminal en `codigo` y sigan la [instalación](codigo/README.md). Usen únicamente el SQL de su variante. Cada integrante copia `.env.example` en su propia computadora y llama `.env` a la copia. [Qué es un .env y qué se sube a GitHub](Leccion_fullstack.md#qué-es-un-env)
+6. Guarden las capturas de pantalla de la etapa 1. En la [bitácora](plantillas/Bitacora_equipo.md), describan las tareas realizadas, los acuerdos y el script SQL elegido. Anoten qué funcionó y en qué archivo retomarán el trabajo.
 
 ## Qué deben desarrollar
 
