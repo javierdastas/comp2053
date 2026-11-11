@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ config.titulo }}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+<a class="saltar" href="#principal">Saltar al contenido</a>
+<header><h1>{{ config.titulo }}</h1>
+  <p>Panel de práctica para la persona operadora. Usa datos ficticios.</p>
+  <p>Bloques de 60 minutos, de 08:00 a 17:00. Hora de Puerto Rico.</p>
+</header>
+<main id="principal">
+  <p id="mensaje" role="status" aria-live="polite" aria-atomic="true"></p>
+  <p id="error" role="alert" tabindex="-1"></p>
+  <section aria-labelledby="titulo-persona">
+    <h2 id="titulo-persona">1 Registrar una persona</h2>
+    <p>Si la persona ya aparece en la lista del paso 2, continúa allí.</p>
+    <form id="form-persona">
+      <label for="nombre">Nombre ficticio (requerido)</label>
+      <input id="nombre" name="nombre" required minlength="2" maxlength="80" autocomplete="off">
+      <label for="email">Correo ficticio (requerido)</label>
+      <input id="email" name="email" type="email" required maxlength="120" aria-describedby="ayuda-email" autocomplete="off">
+      <p id="ayuda-email" class="ayuda">Ejemplo: estudiante3@example.org</p>
+      <button type="submit">Registrar persona</button>
+    </form>
+  </section>
+  <section aria-labelledby="titulo-reserva">
+    <h2 id="titulo-reserva">2 Crear una reserva</h2>
+    <p>Todos los campos son requeridos. La disponibilidad corresponde al recurso seleccionado.</p>
+    <form id="form-reserva">
+      <label for="persona">Persona</label>
+      <select id="persona" required><option value="">Selecciona una persona</option></select>
+      <label for="recurso">{{ config.recurso }} y {{ config.categoria|lower }}</label>
+      <select id="recurso" required><option value="">Selecciona un recurso</option></select>
+      <label for="fecha">Fecha</label>
+      <input id="fecha" type="date" value="{{ hoy }}" min="{{ hoy }}" max="{{ max_fecha }}" required aria-describedby="ayuda-fecha">
+      <p id="ayuda-fecha" class="ayuda">Desde hoy hasta los próximos 30 días. El prototipo admite todos los días.</p>
+      <button type="button" id="ver-horarios">Consultar horarios</button>
+      <label for="hora">Hora de inicio en Puerto Rico</label>
+      <select id="hora" required disabled><option value="">Selecciona recurso y fecha</option></select>
+      <p id="ayuda-hora" class="ayuda" aria-live="polite"></p>
+      <label for="motivo">Motivo breve</label>
+      <textarea id="motivo" rows="3" required minlength="5" maxlength="200" aria-describedby="ayuda-motivo"></textarea>
+      <p id="ayuda-motivo" class="ayuda">Entre 5 y 200 caracteres. Describe una actividad ficticia.</p>
+      <button type="submit" id="crear-reserva" disabled>Crear reserva</button>
+    </form>
+  </section>
+  <section aria-labelledby="titulo-lista">
+    <h2 id="titulo-lista" tabindex="-1">3 Consultar y cancelar</h2>
+    <p>La lista y el resumen muestran todos los recursos para la fecha del paso 2.</p>
+    <button type="button" id="actualizar">Actualizar lista y resumen</button>
+    <p id="resumen"></p>
+    <ul id="por-recurso"></ul>
+    <ul id="reservas" class="reservas"></ul>
+  </section>
+  <noscript>Activa JavaScript para usar los formularios de este ejercicio.</noscript>
+</main>
+<footer><p>Prototipo educativo local. Cancelar elimina el registro y libera la hora.</p></footer>
+</body>
+</html>

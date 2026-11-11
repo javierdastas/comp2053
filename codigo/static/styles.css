@@ -1,0 +1,24 @@
+:root { font-family: system-ui, sans-serif; color: #182330; background: #fff; line-height: 1.6; }
+body { margin: 0 auto; padding: 1.25rem; max-width: 68rem; }
+h1 { line-height: 1.2; font-size: clamp(1.7rem, 5vw, 2.4rem); }
+h2 { line-height: 1.3; margin-top: 0; }
+header, footer { padding-block: 1rem; }
+main { display: grid; gap: 1.5rem; }
+section { border-top: 2px solid #c7ced5; padding-top: 1.5rem; min-width: 0; }
+form { display: grid; gap: .6rem; }
+label { font-weight: 650; }
+input, select, textarea, button { font: inherit; box-sizing: border-box; min-height: 2.8rem; padding: .55rem; }
+input, select, textarea { width: 100%; border: 1px solid #596979; border-radius: .2rem; color: inherit; background: #fff; }
+button { color: white; background: #174a72; border: 2px solid #174a72; border-radius: .2rem; cursor: pointer; }
+button:disabled { opacity: .65; cursor: not-allowed; }
+:focus-visible { outline: 3px solid #9a4c00; outline-offset: 3px; }
+.ayuda { margin: 0 0 .6rem; color: #3f4e5d; }
+#mensaje, #error { margin: 0; grid-column: 1 / -1; white-space: pre-line; }
+#error { color: #8c1621; font-weight: 600; }
+.reservas { padding: 0; list-style: none; }
+.reservas li { padding-block: 1rem; border-bottom: 1px solid #c7ced5; overflow-wrap: anywhere; }
+.reservas p { margin: .3rem 0; }
+.saltar { position: absolute; left: -10000px; }
+.saltar:focus { position: static; }
+@media (min-width: 52rem) { main { grid-template-columns: 1fr 1fr; } section:last-of-type { grid-column: 1 / -1; } }
+/* No hay animaciones ni cambios que dependan exclusivamente de un color. */
